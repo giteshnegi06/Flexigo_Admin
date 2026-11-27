@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { api, type SiteImage } from "../lib/api";
 import { ErrorNote, PageTitle } from "../components/Layout";
+import { ImageUpload } from "../components/ImageUpload";
 
 // Every website photo that is not a home photo (hero, "a day here", seasons, collection panels).
 // Home photos are part of each home. The website picks up changes within 10 minutes.
 const sections: Record<string, string> = { hero: "Hero", day: "A day here", season: "When to come", collection: "Collection panels" };
 
-function ImageEditor({ image, hosts, onSaved }: { image: SiteImage; hosts: string[]; onSaved: (i: SiteImage) => void }) {
+function ImageEditor({ image, onSaved }: { image: SiteImage; onSaved: (i: SiteImage) => void }) {
   const [url, setUrl] = useState(image.url);
   const [alt, setAlt] = useState(image.alt);
   const [busy, setBusy] = useState(false);
@@ -30,14 +31,10 @@ function ImageEditor({ image, hosts, onSaved }: { image: SiteImage; hosts: strin
 
   const input = "mt-1 w-full rounded-xl border border-line bg-white px-3 py-2.5 text-base outline-none focus:border-forest";
   return (
-    <form onSubmit={save} className="grid gap-4 rounded-2xl bg-white p-4 ring-1 ring-line sm:grid-cols-[11rem_1fr] sm:p-5">
-      <img src={url} alt="" className="aspect-[4/3] w-full rounded-xl bg-stone object-cover" />
+    <form onSubmit={save} className="rounded-2xl bg-white p-4 ring-1 ring-line sm:p-5">
       <div className="min-w-0">
-        <p className="font-semibold text-forest">{image.label}</p>
-        <label className="mt-2 block text-sm font-medium text-forest">
-          Image address
-          <input type="url" required value={url} onChange={(e) => setUrl(e.target.value)} className={input} />
-        </label>
+        <p className="mb-3 font-semibold text-forest">{image.label}</p>
+        <ImageUpload label="Photo" value={url} onChange={setUrl} />
         <label className="mt-3 block text-sm font-medium text-forest">
           Description (read aloud to blind visitors and used by Google)
           <input required minLength={3} maxLength={200} value={alt} onChange={(e) => setAlt(e.target.value)} className={input} />
@@ -45,7 +42,7 @@ function ImageEditor({ image, hosts, onSaved }: { image: SiteImage; hosts: strin
         <div className="mt-3 flex flex-wrap items-center gap-3">
           <button disabled={busy || !changed} className="min-h-11 rounded-[10px] bg-forest px-5 text-sm font-semibold text-white hover:bg-forest-soft disabled:opacity-50">{busy ? "Saving..." : "Save"}</button>
           {note && <p role="status" className={`text-sm ${note.ok ? "text-emerald-800" : "text-red-700"}`}>{note.text}</p>}
-          {!note && <p className="text-xs text-muted">Images must be on {hosts.join(" or ")}.</p>}
+          {!note && changed && <p className="text-xs text-muted">Not saved yet.</p>}
         </div>
       </div>
     </form>
@@ -54,13 +51,11 @@ function ImageEditor({ image, hosts, onSaved }: { image: SiteImage; hosts: strin
 
 export function ImagesPage() {
   const [images, setImages] = useState<SiteImage[]>([]);
-  const [hosts, setHosts] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     api<{ images: SiteImage[]; allowedHosts: string[] }>("/admin/images")
       .then((r) => {
         setImages(r.images);
-        setHosts(r.allowedHosts);
       })
       .catch((e: Error) => setError(e.message));
   }, []);
@@ -68,7 +63,7 @@ export function ImagesPage() {
   return (
     <>
       <PageTitle title="Website images" />
-      <p className="-mt-2 mb-5 max-w-2xl text-sm text-muted">All website photos come from here and from each home's photos. Paste a new image address to change one; the preview updates as you type.</p>
+      <p className="-mt-2 mb-5 max-w-2xl text-sm text-muted">All website photos come from here and from each home's photos. Upload a new photo to change one, then save.</p>
       <ErrorNote message={error} />
       {Object.entries(sections).map(([key, title]) => {
         const list = images.filter((i) => i.section === key);
@@ -78,7 +73,7 @@ export function ImagesPage() {
             <h2 className="mb-3 text-lg font-semibold text-forest">{title}</h2>
             <div className="grid gap-4 xl:grid-cols-2">
               {list.map((img) => (
-                <ImageEditor key={img.key} image={img} hosts={hosts} onSaved={(s) => setImages((all) => all.map((x) => (x.key === s.key ? s : x)))} />
+                <ImageEditor key={img.key} image={img} onSaved={(s) => setImages((all) => all.map((x) => (x.key === s.key ? s : x)))} />
               ))}
             </div>
           </section>

@@ -81,6 +81,7 @@ export type Home = {
   area: string | null;
   bathrooms: number;
   photos: { url: string; alt: string }[];
+  highlights: string[];
 };
 export type PropertyType = "apartment" | "villa";
 export type BlockedNight = { night: string; source: "airbnb" | "booking" | "manual"; note: string | null };
@@ -94,3 +95,42 @@ export type Holiday = { id: number; day: string; name: string };
 export type SiteImage = { key: string; section: string; label: string; url: string; alt: string; sortOrder: number; updatedAt: string };
 export type ContactRequest = { id: number; name: string; phone: string; message: string | null; status: EnquiryStatus; sourcePage: string | null; createdAt: string };
 export type Location = { id: number; slug: string; name: string; description: string; image: string; imageAlt: string; sortOrder: number; isActive: boolean; homes: number };
+
+/** Where to load a photo from. Uploaded photos are saved as "/api/media/<id>", which lives on the API server. */
+export const imgSrc = (url: string) => (url.startsWith("/api/media/") ? API + url : url);
+
+const MAX_SIDE = 2000; // longest side after shrinking; plenty for full-screen photos
+const QUALITY = 0.82;
+
+/** Shrinks a photo to WebP in the browser (at most 2000 px on its longest side), then uploads it. Returns its path. */
+export async function uploadImage(file: File): Promise<string> {
+  if (!file.type.startsWith("image/")) throw new ApiError(`${file.name} is not a photo.`, 400);
+  let blob: Blob = file;
+  let width: number | undefined;
+  let height: number | undefined;
+  try {
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, MAX_SIDE / Math.max(bitmap.width, bitmap.height));
+    width = Math.round(bitmap.width * scale);
+    height = Math.round(bitmap.height * scale);
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    canvas.getContext("2d")!.drawImage(bitmap, 0, 0, width, height);
+    bitmap.close();
+    const webp = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/webp", QUALITY));
+    if (webp && webp.type === "image/webp") blob = webp; // older browsers without WebP keep the original file
+  } catch {
+    // The browser could not read it (for example HEIC on Windows); send it as it is and let the server decide.
+  }
+  const query = width && height ? `?w=${width}&h=${height}` : "";
+  let res: Response;
+  try {
+    res = await fetch(`${API}/api/admin/media${query}`, { method: "POST", headers: { "Content-Type": blob.type || "application/octet-stream", Authorization: `Bearer ${token.get()}` }, body: blob });
+  } catch {
+    throw new ApiError(`Could not upload ${file.name}. Check your connection and try again.`, 0);
+  }
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) throw new ApiError(body.error ?? `Upload failed (${res.status})`, res.status);
+  return body.url as string;
+}
