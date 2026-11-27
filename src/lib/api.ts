@@ -1,5 +1,7 @@
 // Admin API client. The session token lives in sessionStorage, so it is cleared when the browser tab closes.
-const API = import.meta.env.VITE_API_URL ?? "http://localhost:4000";
+// Trailing slashes are removed: "https://api.example/" would make "//api/..." URLs, which Vercel redirects,
+// and browsers refuse redirects on CORS checks, so sign-in would fail with "Cannot reach the API server".
+const API = (import.meta.env.VITE_API_URL || "http://localhost:4000").trim().replace(/\/+$/, "");
 const KEY = "flexigo-admin-token";
 
 export const token = {
