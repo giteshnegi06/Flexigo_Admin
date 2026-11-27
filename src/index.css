@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+/* Same palette as the guest website (see frontend/src/app/globals.css); all text pairs pass WCAG AA. */
+@theme {
+  --color-forest: #1c2b24;
+  --color-forest-soft: #2c4237;
+  --color-stone: #f8f5f0;
+  --color-pine: #b8862f;
+  --color-pine-dark: #8a5d1a;
+  --color-ink: #1f2622;
+  --color-muted: #5c6560;
+  --color-line: #e5e0d7;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+@layer base {
+  body {
+    background: var(--color-stone);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+  .lucide {
+    stroke-width: 1.75;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-pine);
+    outline-offset: 2px;
+  }
+}
