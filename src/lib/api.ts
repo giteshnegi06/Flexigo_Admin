@@ -22,7 +22,11 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
       headers: { "Content-Type": "application/json", ...(token.get() ? { Authorization: `Bearer ${token.get()}` } : {}), ...init.headers },
     });
   } catch {
-    throw new ApiError("Cannot reach the API server. Is the backend running?", 0);
+    // Also what the browser reports when the backend refuses this site's address (CORS), so say how to check both.
+    throw new ApiError(
+      `Cannot reach the API server at ${API}. Check that the backend is running, and that its ADMIN_URL setting includes ${window.location.origin}.`,
+      0,
+    );
   }
   const body = await res.json().catch(() => ({}));
   if (res.status === 401 && !path.endsWith("/login")) {
