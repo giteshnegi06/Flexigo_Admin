@@ -10,6 +10,8 @@ import { EnquiriesPage } from "./pages/Enquiries";
 import { HomesPage } from "./pages/Homes";
 import { CalendarPage } from "./pages/Calendar";
 import { HolidaysPage } from "./pages/Holidays";
+import { ImagesPage } from "./pages/Images";
+import { MessagesPage } from "./pages/Messages";
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   return token.get() ? children : <Navigate to="/login" replace />;
@@ -30,6 +32,8 @@ const router = createBrowserRouter([
       { path: "homes", element: <HomesPage /> },
       { path: "calendar", element: <CalendarPage /> },
       { path: "holidays", element: <HolidaysPage /> },
+      { path: "messages", element: <MessagesPage /> },
+      { path: "images", element: <ImagesPage /> },
       { path: "*", element: <Navigate to="/" replace /> },
     ],
   },

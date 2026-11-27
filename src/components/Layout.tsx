@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router";
-import { CalendarDays, Home, Inbox, LayoutDashboard, LogOut, Menu, PartyPopper, X } from "lucide-react";
+import { CalendarDays, Home, Images, Inbox, LayoutDashboard, LogOut, Menu, MessageSquareText, PartyPopper, X } from "lucide-react";
 import { token } from "../lib/api";
 
 const links = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, end: true },
   { to: "/enquiries", label: "Enquiries", icon: Inbox },
+  { to: "/messages", label: "Messages", icon: MessageSquareText },
   { to: "/calendar", label: "Calendar", icon: CalendarDays },
   { to: "/holidays", label: "Holidays", icon: PartyPopper },
   { to: "/homes", label: "Homes and prices", icon: Home },
+  { to: "/images", label: "Website images", icon: Images },
 ];
 
 export function Layout() {

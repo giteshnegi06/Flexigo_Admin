@@ -20,6 +20,7 @@ export function DashboardPage() {
   const cards = summary
     ? [
         { label: "New enquiries", value: summary.newEnquiries, to: "/enquiries" },
+        { label: "New messages", value: summary.newMessages ?? 0, to: "/messages" },
         { label: "Upcoming booked stays", value: summary.upcomingStays, to: "/enquiries" },
         { label: "Nights blocked this month", value: summary.blockedNightsThisMonth, to: "/calendar" },
         { label: "Active homes", value: summary.activeHomes, to: "/homes" },
@@ -30,8 +31,8 @@ export function DashboardPage() {
     <>
       <PageTitle title="Dashboard" />
       <ErrorNote message={error} />
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {(summary ? cards : Array.from({ length: 4 }, (_, i) => ({ label: "Loading", value: "-", to: "/" + i }))).map((c) => (
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+        {(summary ? cards : Array.from({ length: 5 }, (_, i) => ({ label: "Loading", value: "-", to: "/" + i }))).map((c) => (
           <Link key={c.label + c.to} to={c.to} className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-line hover:ring-forest">
             <p className="text-sm text-muted">{c.label}</p>
             <p className="mt-2 text-3xl font-semibold text-forest">{c.value}</p>

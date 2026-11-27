@@ -39,7 +39,7 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
   return body as T;
 }
 
-export type Summary = { newEnquiries: number; upcomingStays: number; activeHomes: number; blockedNightsThisMonth: number; today: string };
+export type Summary = { newEnquiries: number; newMessages: number; upcomingStays: number; activeHomes: number; blockedNightsThisMonth: number; today: string };
 export type EnquiryStatus = "new" | "contacted" | "booked" | "closed";
 export type Enquiry = {
   id: number;
@@ -73,6 +73,9 @@ export type Home = {
   icalUrl: string | null;
   isActive: boolean;
   coverPhoto: string;
+  mapLat: number | null;
+  mapLng: number | null;
+  mapExact: boolean;
 };
 export type BlockedNight = { night: string; source: "airbnb" | "booking" | "manual"; note: string | null };
 
@@ -82,3 +85,5 @@ export function prettyDate(iso: string) {
   return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
 }
 export type Holiday = { id: number; day: string; name: string };
+export type SiteImage = { key: string; section: string; label: string; url: string; alt: string; sortOrder: number; updatedAt: string };
+export type ContactRequest = { id: number; name: string; phone: string; message: string | null; status: EnquiryStatus; sourcePage: string | null; createdAt: string };
