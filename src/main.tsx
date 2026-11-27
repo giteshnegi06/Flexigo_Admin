@@ -11,6 +11,7 @@ import { HomesPage } from "./pages/Homes";
 import { CalendarPage } from "./pages/Calendar";
 import { HolidaysPage } from "./pages/Holidays";
 import { ImagesPage } from "./pages/Images";
+import { LocationsPage } from "./pages/Locations";
 import { MessagesPage } from "./pages/Messages";
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
       { index: true, element: <DashboardPage /> },
       { path: "enquiries", element: <EnquiriesPage /> },
       { path: "homes", element: <HomesPage /> },
+      { path: "locations", element: <LocationsPage /> },
       { path: "calendar", element: <CalendarPage /> },
       { path: "holidays", element: <HolidaysPage /> },
       { path: "messages", element: <MessagesPage /> },

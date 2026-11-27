@@ -76,7 +76,13 @@ export type Home = {
   mapLat: number | null;
   mapLng: number | null;
   mapExact: boolean;
+  locationId: number | null;
+  propertyType: PropertyType;
+  area: string | null;
+  bathrooms: number;
+  photos: { url: string; alt: string }[];
 };
+export type PropertyType = "apartment" | "villa";
 export type BlockedNight = { night: string; source: "airbnb" | "booking" | "manual"; note: string | null };
 
 export const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
@@ -87,3 +93,4 @@ export function prettyDate(iso: string) {
 export type Holiday = { id: number; day: string; name: string };
 export type SiteImage = { key: string; section: string; label: string; url: string; alt: string; sortOrder: number; updatedAt: string };
 export type ContactRequest = { id: number; name: string; phone: string; message: string | null; status: EnquiryStatus; sourcePage: string | null; createdAt: string };
+export type Location = { id: number; slug: string; name: string; description: string; image: string; imageAlt: string; sortOrder: number; isActive: boolean; homes: number };

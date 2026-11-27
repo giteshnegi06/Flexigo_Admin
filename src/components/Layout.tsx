@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router";
-import { CalendarDays, Home, Images, Inbox, LayoutDashboard, LogOut, Menu, MessageSquareText, PartyPopper, X } from "lucide-react";
+import { CalendarDays, Home, Images, Inbox, LayoutDashboard, LogOut, MapPinned, Menu, MessageSquareText, PartyPopper, X } from "lucide-react";
 import { token } from "../lib/api";
 
 const links = [
@@ -9,6 +9,7 @@ const links = [
   { to: "/messages", label: "Messages", icon: MessageSquareText },
   { to: "/calendar", label: "Calendar", icon: CalendarDays },
   { to: "/holidays", label: "Holidays", icon: PartyPopper },
+  { to: "/locations", label: "Locations", icon: MapPinned },
   { to: "/homes", label: "Homes and prices", icon: Home },
   { to: "/images", label: "Website images", icon: Images },
 ];
