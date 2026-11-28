@@ -4,6 +4,7 @@ import { api, imgSrc, inr, type Home, type Location, type PropertyType } from ".
 import { ErrorNote, PageTitle } from "../components/Layout";
 import { FormSection, Modal } from "../components/Modal";
 import { ImageUpload, PhotoManager, type Photo } from "../components/ImageUpload";
+import { Select } from "../components/Select";
 
 // Homes and prices: a list of homes; "Add a property" and "Edit" open the same full form in a popup.
 
@@ -126,18 +127,24 @@ function HomeFormModal({ home, locations, onClose, onSaved }: { home: Home | nul
         <FormSection title="Basics">
           <div className="grid gap-4 sm:grid-cols-2">
             <Field text="Property name *" className="sm:col-span-2"><input required minLength={2} maxLength={120} value={d.name} onChange={(e) => set("name", e.target.value)} placeholder="For example, Pine Cottage" className={input} /></Field>
-            <Field text="Location *">
-              <select required value={d.locationId ?? ""} onChange={(e) => set("locationId", num(e.target.value))} className={input}>
-                <option value="" disabled>Choose a location</option>
-                {locations.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
-              </select>
-            </Field>
-            <Field text="Type *">
-              <select value={d.propertyType} onChange={(e) => set("propertyType", e.target.value as PropertyType)} className={input}>
-                <option value="apartment">Apartment</option>
-                <option value="villa">Villa</option>
-              </select>
-            </Field>
+            <Select
+              label="Location"
+              required
+              placeholder="Choose a location"
+              value={d.locationId}
+              onChange={(v) => set("locationId", v)}
+              options={locations.map((l) => ({ value: l.id, label: l.name, hint: `${l.homes} ${l.homes === 1 ? "property" : "properties"}${l.isActive ? "" : " · hidden on website"}` }))}
+            />
+            <Select<PropertyType>
+              label="Type"
+              required
+              value={d.propertyType}
+              onChange={(v) => set("propertyType", v)}
+              options={[
+                { value: "apartment", label: "Apartment", hint: "A flat in a building or society" },
+                { value: "villa", label: "Villa", hint: "A standalone house or cottage" },
+              ]}
+            />
             <Field text="Area (optional)"><input maxLength={80} value={d.area} onChange={(e) => set("area", e.target.value)} placeholder="For example, Panthaghati" className={input} /></Field>
             <label className="flex min-h-11 items-end gap-2 pb-2 text-sm font-medium text-forest">
               <input type="checkbox" checked={d.isActive} onChange={(e) => set("isActive", e.target.checked)} className="size-5 accent-forest" /> Shown on website

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { api, prettyDate, type BlockedNight, type Home } from "../lib/api";
 import { ErrorNote, PageTitle } from "../components/Layout";
+import { Select } from "../components/Select";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 const iso = (y: number, m: number, d: number) => `${y}-${pad(m + 1)}-${pad(d)}`;
@@ -70,12 +71,17 @@ export function CalendarPage() {
   return (
     <>
       <PageTitle title="Calendar">
-        <label className="text-sm font-medium text-forest">
-          <span className="sr-only">Property</span>
-          <select value={homeId ?? ""} onChange={(e) => { setHomeId(Number(e.target.value)); setRange(null); }} className="min-h-11 rounded-xl border border-line bg-white px-3">
-            {homes.map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}
-          </select>
-        </label>
+        <Select
+          label="Property"
+          hideLabel
+          className="w-full sm:w-64"
+          value={homeId}
+          onChange={(v) => {
+            setHomeId(v);
+            setRange(null);
+          }}
+          options={homes.map((h) => ({ value: h.id, label: h.name }))}
+        />
       </PageTitle>
       <ErrorNote message={error} />
       <div className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-line sm:p-6">
