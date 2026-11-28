@@ -94,7 +94,7 @@ export function LocationsPage() {
   return (
     <>
       <PageTitle title="Locations" />
-      <p className="-mt-2 mb-5 max-w-2xl text-sm text-muted">Each location is a photo card under the home page hero. Guests click it to see every home there. Choose a home's location when you add or edit the home.</p>
+      <p className="-mt-2 mb-5 max-w-2xl text-sm text-muted">Each location is a photo card under the home page hero. Guests click it to see every property there. Choose a property's location when you add or edit the property.</p>
       <ErrorNote message={error} />
       {done && <p role="status" className="mb-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-900">{done}</p>}
       <button onClick={() => { setOpen({ location: null }); setDone(null); }} className="mb-6 inline-flex min-h-11 items-center gap-2 rounded-[10px] bg-forest px-5 text-sm font-semibold text-white hover:bg-forest-soft">
@@ -106,7 +106,7 @@ export function LocationsPage() {
             <img src={imgSrc(l.image)} alt="" className="h-20 w-16 rounded-xl bg-stone object-cover" />
             <div className="min-w-0 flex-1">
               <p className="font-semibold text-forest">{l.name} {!l.isActive && <span className="ml-1 rounded-full bg-stone px-2 py-0.5 text-xs text-muted">Hidden</span>}</p>
-              <p className="text-sm text-muted">{l.homes} {l.homes === 1 ? "home" : "homes"} · /locations/{l.slug}</p>
+              <p className="text-sm text-muted">{l.homes} {l.homes === 1 ? "property" : "properties"} · /locations/{l.slug}</p>
             </div>
             <button onClick={() => { setOpen({ location: l }); setDone(null); }} className="inline-flex min-h-11 items-center gap-2 rounded-[10px] px-4 text-sm font-semibold text-forest ring-1 ring-line hover:bg-stone"><Pencil size={16} aria-hidden /> Edit</button>
             <button onClick={() => remove(l)} aria-label={`Remove ${l.name}`} className="grid size-11 place-items-center rounded-full text-muted hover:bg-stone hover:text-rose-700"><Trash2 size={18} aria-hidden /></button>

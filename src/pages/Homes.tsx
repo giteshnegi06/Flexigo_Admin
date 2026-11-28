@@ -5,7 +5,7 @@ import { ErrorNote, PageTitle } from "../components/Layout";
 import { FormSection, Modal } from "../components/Modal";
 import { ImageUpload, PhotoManager, type Photo } from "../components/ImageUpload";
 
-// Homes and prices: a list of homes; "Add a home" and "Edit" open the same full form in a popup.
+// Homes and prices: a list of homes; "Add a property" and "Edit" open the same full form in a popup.
 
 type Draft = {
   name: string;
@@ -111,12 +111,12 @@ function HomeFormModal({ home, locations, onClose, onSaved }: { home: Home | nul
 
   return (
     <Modal
-      title={home ? `Edit ${home.name}` : "Add a home"}
+      title={home ? `Edit ${home.name}` : "Add a property"}
       subtitle={home ? `/homes/${home.slug}` : "Fill in the details guests see on the website. Fields marked * are needed."}
       onClose={onClose}
       footer={
         <div className="flex flex-wrap items-center gap-3">
-          <button form={formId} disabled={busy} className="min-h-11 rounded-[10px] bg-forest px-6 font-semibold text-white hover:bg-forest-soft disabled:opacity-60">{busy ? "Saving..." : home ? "Save changes" : "Add home"}</button>
+          <button form={formId} disabled={busy} className="min-h-11 rounded-[10px] bg-forest px-6 font-semibold text-white hover:bg-forest-soft disabled:opacity-60">{busy ? "Saving..." : home ? "Save changes" : "Add property"}</button>
           <button type="button" onClick={onClose} className="min-h-11 rounded-[10px] px-4 text-sm font-semibold text-forest hover:bg-stone">Cancel</button>
           {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
         </div>
@@ -125,7 +125,7 @@ function HomeFormModal({ home, locations, onClose, onSaved }: { home: Home | nul
       <form id={formId} onSubmit={save}>
         <FormSection title="Basics">
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field text="Home name *" className="sm:col-span-2"><input required minLength={2} maxLength={120} value={d.name} onChange={(e) => set("name", e.target.value)} placeholder="For example, Pine Cottage" className={input} /></Field>
+            <Field text="Property name *" className="sm:col-span-2"><input required minLength={2} maxLength={120} value={d.name} onChange={(e) => set("name", e.target.value)} placeholder="For example, Pine Cottage" className={input} /></Field>
             <Field text="Location *">
               <select required value={d.locationId ?? ""} onChange={(e) => set("locationId", num(e.target.value))} className={input}>
                 <option value="" disabled>Choose a location</option>
@@ -154,7 +154,7 @@ function HomeFormModal({ home, locations, onClose, onSaved }: { home: Home | nul
           </div>
         </FormSection>
 
-        <FormSection title="Prices" hint="For the whole home, per night, before taxes.">
+        <FormSection title="Prices" hint="For the whole property, per night, before taxes.">
           <div className="grid gap-4 sm:grid-cols-3">
             <Field text="Weeknight (₹) *"><input type="number" min={0} required value={d.nightlyPrice} onChange={(e) => set("nightlyPrice", Number(e.target.value))} className={input} /></Field>
             <Field text="Friday and Saturday (₹) *"><input type="number" min={0} required value={d.weekendPrice} onChange={(e) => set("weekendPrice", Number(e.target.value))} className={input} /></Field>
@@ -170,13 +170,13 @@ function HomeFormModal({ home, locations, onClose, onSaved }: { home: Home | nul
           </div>
         </FormSection>
 
-        <FormSection title="Photos" hint="The cover is shown on cards and search results. The gallery is the photo tour on the home's page.">
+        <FormSection title="Photos" hint="The cover is shown on cards and search results. The gallery is the photo tour on the property's page.">
           <ImageUpload label="Cover photo" required value={d.coverPhoto} onChange={(url) => set("coverPhoto", url)} />
           <p className="mb-2 mt-6 text-sm font-medium text-forest">Gallery</p>
           <PhotoManager photos={d.photos} onChange={(p) => set("photos", p)} cover={d.coverPhoto} onCover={(url) => set("coverPhoto", url)} />
         </FormSection>
 
-        <FormSection title="Location on the map" hint="Shown in the Location section of the home's page. Leave empty to hide the map.">
+        <FormSection title="Location on the map" hint="Shown in the Location section of the property's page. Leave empty to hide the map.">
           <Field text="Google Maps link or coordinates"><input value={d.pin} onChange={(e) => set("pin", e.target.value)} placeholder="31.0676, 77.1828 or a Google Maps link" className={input} /></Field>
           <p className={`mt-1 text-xs ${d.pin && !pin ? "text-red-700" : "text-muted"}`}>
             {d.pin && !pin ? "Could not find a point in that. In Google Maps, right-click the building and click the numbers at the top to copy them." : pin ? (
@@ -223,11 +223,11 @@ export function HomesPage() {
 
   return (
     <>
-      <PageTitle title="Homes and prices" />
+      <PageTitle title="Properties and prices" />
       <ErrorNote message={error} />
       {done && <p role="status" className="mb-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-900">{done}</p>}
       <button onClick={() => { setOpen({ home: null }); setDone(null); }} className="mb-6 inline-flex min-h-11 items-center gap-2 rounded-[10px] bg-forest px-5 text-sm font-semibold text-white hover:bg-forest-soft">
-        <Plus size={18} aria-hidden /> Add a home
+        <Plus size={18} aria-hidden /> Add a property
       </button>
       <ul className="grid gap-3">
         {homes.map((h) => (

@@ -63,7 +63,7 @@ export function ImagesPage() {
   return (
     <>
       <PageTitle title="Website images" />
-      <p className="-mt-2 mb-5 max-w-2xl text-sm text-muted">All website photos come from here and from each home's photos. Upload a new photo to change one, then save.</p>
+      <p className="-mt-2 mb-5 max-w-2xl text-sm text-muted">All website photos come from here and from each property's photos. Upload a new photo to change one, then save.</p>
       <ErrorNote message={error} />
       {Object.entries(sections).map(([key, title]) => {
         const list = images.filter((i) => i.section === key);

@@ -10,7 +10,7 @@ const links = [
   { to: "/calendar", label: "Calendar", icon: CalendarDays },
   { to: "/holidays", label: "Holidays", icon: PartyPopper },
   { to: "/locations", label: "Locations", icon: MapPinned },
-  { to: "/homes", label: "Homes and prices", icon: Home },
+  { to: "/homes", label: "Properties and prices", icon: Home },
   { to: "/images", label: "Website images", icon: Images },
 ];
 

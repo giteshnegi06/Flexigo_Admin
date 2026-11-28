@@ -71,7 +71,7 @@ export function CalendarPage() {
     <>
       <PageTitle title="Calendar">
         <label className="text-sm font-medium text-forest">
-          <span className="sr-only">Home</span>
+          <span className="sr-only">Property</span>
           <select value={homeId ?? ""} onChange={(e) => { setHomeId(Number(e.target.value)); setRange(null); }} className="min-h-11 rounded-xl border border-line bg-white px-3">
             {homes.map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}
           </select>

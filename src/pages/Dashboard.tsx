@@ -23,7 +23,7 @@ export function DashboardPage() {
         { label: "New messages", value: summary.newMessages ?? 0, to: "/messages" },
         { label: "Upcoming booked stays", value: summary.upcomingStays, to: "/enquiries" },
         { label: "Nights blocked this month", value: summary.blockedNightsThisMonth, to: "/calendar" },
-        { label: "Active homes", value: summary.activeHomes, to: "/homes" },
+        { label: "Active properties", value: summary.activeHomes, to: "/homes" },
       ]
     : [];
 
