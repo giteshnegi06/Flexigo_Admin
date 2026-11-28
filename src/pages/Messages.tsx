@@ -3,15 +3,10 @@ import { Phone } from "lucide-react";
 import { WhatsAppIcon } from "../components/WhatsAppIcon";
 import { api, prettyDate, type ContactRequest, type EnquiryStatus } from "../lib/api";
 import { ErrorNote, PageTitle } from "../components/Layout";
+import { StatusButtons } from "../components/StatusButtons";
 
 // Call back requests from the website's "Get in touch" popup.
 const statuses: EnquiryStatus[] = ["new", "contacted", "booked", "closed"];
-const badge: Record<EnquiryStatus, string> = {
-  new: "bg-amber-100 text-amber-900",
-  contacted: "bg-sky-100 text-sky-900",
-  booked: "bg-emerald-100 text-emerald-900",
-  closed: "bg-stone text-muted",
-};
 
 export function MessagesPage() {
   const [rows, setRows] = useState<ContactRequest[]>([]);
@@ -58,13 +53,7 @@ export function MessagesPage() {
                 <p className="text-sm text-muted">Received {prettyDate(m.createdAt)}{m.sourcePage ? ` · from ${m.sourcePage}` : ""}</p>
                 {m.message && <p className="mt-2 max-w-2xl text-sm text-ink">“{m.message}”</p>}
               </div>
-              <div className="flex items-center gap-2">
-                <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${badge[m.status]}`}>{m.status}</span>
-                <label className="sr-only" htmlFor={`msg-status-${m.id}`}>Change status</label>
-                <select id={`msg-status-${m.id}`} value={m.status} onChange={(e) => change(m.id, e.target.value as EnquiryStatus)} className="min-h-11 rounded-xl border border-line bg-white px-3 text-sm capitalize">
-                  {statuses.map((s) => <option key={s} value={s}>{s}</option>)}
-                </select>
-              </div>
+              <StatusButtons value={m.status} name={`message #${m.id}`} onChange={(s) => change(m.id, s)} />
             </div>
             <div className="mt-3 flex flex-wrap gap-2 text-sm">
               <a href={`tel:${m.phone.replace(/\s/g, "")}`} className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-stone px-4 font-medium text-forest"><Phone size={14} aria-hidden /> {m.phone}</a>

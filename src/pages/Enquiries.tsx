@@ -3,14 +3,9 @@ import { Download, Phone } from "lucide-react";
 import { WhatsAppIcon } from "../components/WhatsAppIcon";
 import { api, inr, prettyDate, type Enquiry, type EnquiryStatus } from "../lib/api";
 import { ErrorNote, PageTitle } from "../components/Layout";
+import { StatusButtons } from "../components/StatusButtons";
 
 const statuses: EnquiryStatus[] = ["new", "contacted", "booked", "closed"];
-const badge: Record<EnquiryStatus, string> = {
-  new: "bg-amber-100 text-amber-900",
-  contacted: "bg-sky-100 text-sky-900",
-  booked: "bg-emerald-100 text-emerald-900",
-  closed: "bg-stone text-muted",
-};
 
 function toCsv(rows: Enquiry[]) {
   const cols = ["id", "createdAt", "home", "checkIn", "checkOut", "adults", "children", "name", "phone", "email", "quotedTotal", "status", "message", "sourcePage"] as const;
@@ -83,13 +78,7 @@ export function EnquiriesPage() {
                   <p className="mt-1 text-sm text-forest">Quoted {inr(e.quotedTotal)} · received {prettyDate(e.createdAt)}</p>
                   {e.message && <p className="mt-2 max-w-2xl text-sm text-ink">“{e.message}”</p>}
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${badge[e.status]}`}>{e.status}</span>
-                  <label className="sr-only" htmlFor={`status-${e.id}`}>Change status</label>
-                  <select id={`status-${e.id}`} value={e.status} onChange={(ev) => change(e.id, ev.target.value as EnquiryStatus)} className="min-h-11 rounded-xl border border-line bg-white px-3 text-sm capitalize">
-                    {statuses.map((s) => <option key={s} value={s}>{s}</option>)}
-                  </select>
-                </div>
+                <StatusButtons value={e.status} name={`enquiry #${e.id}`} onChange={(s) => change(e.id, s)} />
               </div>
               <div className="mt-3 flex flex-wrap gap-2 text-sm">
                 <a href={`tel:${e.phone.replace(/\s/g, "")}`} className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-stone px-4 font-medium text-forest"><Phone size={14} aria-hidden /> {e.phone}</a>
